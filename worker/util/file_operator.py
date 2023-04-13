@@ -4,7 +4,7 @@ from pathlib import Path
 class FileOperator:
 
     @staticmethod
-    def write_hash_map_to_file(key_mapping):
+    def write_hashmap_to_file(key_mapping):
         worker_no = os.getenv("workerNo")
         file_path = f"output-{worker_no}.txt"
         output_file_path = Path(file_path)
