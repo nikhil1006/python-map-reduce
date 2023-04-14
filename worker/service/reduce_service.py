@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from .word_count_reducer import WordCountReducer
 from .distributed_grep_reducer import DistributedGrepReducer
 from .reverse_web_link_reducer import ReverseWebLinkReducer
-from util.file_operator import write_hashmap_to_file
+from util.file_operator import FileOperator
 
 class ReduceService:
 
@@ -20,7 +20,7 @@ class ReduceService:
             for future in as_completed(futures):
                 future.result()
 
-        return write_hashmap_to_file(key_mapping)
+        return FileOperator.write_hashmap_to_file(key_mapping)
 
     def distributed_grep(self, reduce_obj):
         key_mapping = {}
@@ -33,7 +33,7 @@ class ReduceService:
             for future in as_completed(futures):
                 future.result()
 
-        return write_hashmap_to_file(key_mapping)
+        return FileOperator.write_hashmap_to_file(key_mapping)
 
     def reverse_web_link(self, reduce_obj):
         key_mapping = {}
@@ -46,4 +46,4 @@ class ReduceService:
             for future in as_completed(futures):
                 future.result()
 
-        return write_hashmap_to_file(key_mapping)
+        return FileOperator.write_hashmap_to_file(key_mapping)
