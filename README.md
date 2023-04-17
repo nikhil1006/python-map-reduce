@@ -1,5 +1,11 @@
 # Map Reduce Implementation
 
+
+👉 The application’s initial design, code, logic, debug, test and deployment was done in Java by [Narayana Murari Gowrishetty](https://github.com/NarayanaMurariG).
+
+
+Java code was manually translated into Python, ensuring that the logic remained intact. This included converting data structures, loops, conditionals, and function calls to their equivalent Python constructs. The networking components used in the Java version, such as sockets, were replaced with Python libraries and methods. The Flask framework was used to build the master and worker servers, allowing for easier handling of HTTP requests and responses. Java's multithreading was replaced with Python's threading module, and Java's HTTP server was replaced with Flask for networking components.
+
 # Folder structure
 
 ```markdown
