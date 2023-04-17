@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 from service.master_service import MasterService
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 service = MasterService()
 
 
