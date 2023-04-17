@@ -10,7 +10,7 @@ class ReduceTracker:
         self.input_parameter = input_parameter
 
     def run(self):
-        url = f"http://localhost:{self.worker_port}/reduceProcess"
+        url = f"http://127.0.0.1:{self.worker_port}/reduceProcess"
 
         headers = {
             "Content-Type": "application/json",
