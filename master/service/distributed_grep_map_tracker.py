@@ -12,7 +12,7 @@ class DistributedGrepMapTracker(Future):
         self.input_parameter = input_parameter
 
     def run(self):
-        url = f'http://localhost:{self.worker_port}/mapProcess'
+        url = f'http://127.0.0.1:{self.worker_port}/mapProcess'
 
         headers = {
             'Content-Type': 'application/json',
@@ -31,6 +31,6 @@ class DistributedGrepMapTracker(Future):
 
         print(response)
         if response.status_code == 200:
-            self.set_result(response.text)
+            self.set_result(response.json()["fileName"])
         else:
             self.set_exception(Exception("Request failed"))

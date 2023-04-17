@@ -10,7 +10,7 @@ class ReverseWebLinkMapTracker:
         self.feature = feature
 
     def run(self):
-        url = f"http://localhost:{self.worker_port}/mapProcess"
+        url = f"http://127.0.0.1:{self.worker_port}/mapProcess"
 
         headers = {
             "Content-Type": "application/json",
@@ -27,6 +27,7 @@ class ReverseWebLinkMapTracker:
         response = requests.post(url, json=data, headers=headers)
 
         if response.status_code == 200:
-            return response.text
+            return response.json()["fileName"]
         else:
             return None
+
