@@ -1,2 +1,6 @@
 .DS_Store
 __pycache__
+intermediateFile-1.txt
+intermediateFile-2.txt
+output-1.txt
+output-2.txt
