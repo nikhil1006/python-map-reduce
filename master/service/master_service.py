@@ -7,14 +7,17 @@ from service.reverse_web_link_map_tracker import ReverseWebLinkMapTracker
 from service.reduce_tracker import ReduceTracker
 
 class MasterService:
-    base_port = 8000
+    base_port = 5000
+
+    def get_worker_port(self, worker_no):
+        return self.base_port + worker_no
 
     def word_count_map_phase(self, payload):
         total_no_of_lines = get_total_no_of_lines(payload["fileName"])
         print(f"Total No Of Lines : {total_no_of_lines}")
 
         trackers = [
-            WordCountMapTracker(self.base_port + (i * 100), payload["fileName"], "WordCount",
+            WordCountMapTracker(self.get_worker_port(i), payload["fileName"], "WordCount",
                                 self.get_start_line_no(i, total_no_of_lines), self.get_end_line_no(i, total_no_of_lines))
             for i in range(3)
         ]
@@ -32,7 +35,7 @@ class MasterService:
         print(f"Total No Of Lines : {total_no_of_lines}")
 
         trackers = [
-            DistributedGrepMapTracker(self.base_port + (i * 100), payload["fileName"], "DistributedGrep",
+            DistributedGrepMapTracker(self.get_worker_port(i), payload["fileName"], "DistributedGrep",
                                       self.get_start_line_no(i, total_no_of_lines), self.get_end_line_no(i, total_no_of_lines),
                                       payload["misc"])
             for i in range(3)
@@ -49,7 +52,7 @@ class MasterService:
         print(f"Total No Of Lines : {total_no_of_lines}")
 
         trackers = [
-            ReverseWebLinkMapTracker(self.base_port + (i * 100), self.get_start_line_no(i, total_no_of_lines),
+            ReverseWebLinkMapTracker(self.get_worker_port(i), self.get_start_line_no(i, total_no_of_lines),
                                      self.get_end_line_no(i, total_no_of_lines), payload["fileName"], "ReverseWebLink")
             for i in range(3)
         ]
@@ -62,7 +65,7 @@ class MasterService:
 
     def reduce_phase(self, intermediate_files, payload, feature):
         trackers = [
-            ReduceTracker(self.base_port + (i * 100), feature, intermediate_files, payload.get("misc", None))
+            ReduceTracker(self.get_worker_port(i), feature, intermediate_files, payload.get("misc", None))
             for i in range(3)
         ]
 
@@ -70,7 +73,7 @@ class MasterService:
             results = [executor.submit(tracker.run) for tracker in trackers]
             output_files = [result.result() for result in results]
 
-        return ','.join(output_files)
+        return ','.join([file for file in output_files if file is not None])
 
     def get_end_line_no(self, worker_no, total_no_of_lines):
         if total_no_of_lines < 3 and worker_no > 1:
