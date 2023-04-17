@@ -12,7 +12,7 @@ class WordCountMapTracker:
         self.input_parameter = input_parameter
 
     def run(self) -> Optional[str]:
-        url = f"http://localhost:{self.worker_port}/mapProcess"
+        url = f"http://127.0.0.1:{self.worker_port}/mapProcess"
 
         headers = {
             'Content-Type': 'application/json',
@@ -25,12 +25,15 @@ class WordCountMapTracker:
             "startNo": self.start_line,
             "endNo": self.end_line
         }
+        if self.input_parameter is not None:
+            payload["misc"] = self.input_parameter
 
         response = requests.post(url, json=payload, headers=headers)
 
         print(response)
 
         if response.status_code == 200:
-            return response.text
+            return response.json()["fileName"]
         else:
             return None
+
