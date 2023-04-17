@@ -20,14 +20,20 @@ def create_worker_controller(worker_no):
         feature = payload["feature"]
         intermediate_files = "Null"
 
-        if feature == "WordCount":
-            intermediate_files = map_service.word_count(payload)
-        elif feature == "DistributedGrep":
-            intermediate_files = map_service.distributed_grep(payload)
-        else:
-            intermediate_files = map_service.reverse_web_link(payload)
+        try:
 
-        return jsonify(intermediate_files), 200
+            if feature == "WordCount":
+                intermediate_files = map_service.word_count(payload)
+            elif feature == "DistributedGrep":
+                intermediate_files = map_service.distributed_grep(payload)
+            else:
+                intermediate_files = map_service.reverse_web_link(payload)
+
+        except Exception as e:
+            print(e)
+            return jsonify({"error": str(e)}), 500
+            
+        return jsonify({"fileName":intermediate_files}), 200
 
 
     @worker_controller.route("/reduceProcess", methods=["POST"])
@@ -38,12 +44,16 @@ def create_worker_controller(worker_no):
         feature = payload["feature"]
         output_files = "Null"
 
-        if feature == "WordCount":
-            output_files = reduce_service.word_count(payload)
-        elif feature == "DistributedGrep":
-            output_files = reduce_service.distributed_grep(payload)
-        else:
-            output_files = reduce_service.reverse_web_link(payload)
+        try:
+            if feature == "WordCount":
+                output_files = reduce_service.word_count(payload)
+            elif feature == "DistributedGrep":
+                output_files = reduce_service.distributed_grep(payload)
+            else:
+                output_files = reduce_service.reverse_web_link(payload)
+        except Exception as e:
+            print(e)
+            return jsonify({"error": str(e)}), 500
 
         return jsonify(output_files), 200
     
